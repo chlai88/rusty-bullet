@@ -1,0 +1,20 @@
+[package]
+name = "rusty-bullet"
+version = "0.0.1"
+authors = ["Chern Lai <chlai@simiwako.com>"]
+links = "rb_bullet"
+build = "build.rs"
+
+description = "A rust wrapper for bullet physics library"
+documentation = ""
+keywords = ["3d", "physics", "rigid body", "binding"]
+repository = "https://github.com/chlai88/rusty-bullet"
+readme = "README.md"
+license = "MIT"
+
+[lib]
+name = "rusty_bullet"
+path = "./src/lib.rs"
+
+# [target.x86_64-apple-darwin.rb_bullet]
+# rustc-link-search = ["./target/release/native"]
