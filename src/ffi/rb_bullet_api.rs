@@ -32,9 +32,9 @@ pub const RB_LIMIT_ANG_Y:c_int = 4;
 pub const RB_LIMIT_ANG_Z:c_int = 5;
 
 #[link(name = "rb_bullet", kind = "static")]
-extern {
+extern "C" {
 
-	pub fn RB_dworld_new(gravity: *const c_float) -> *const rbDynamicsWorld;
+	pub fn RB_dworld_new(gravity: &[c_float; 3]) -> *const rbDynamicsWorld;
 
 	// Delete the given dynamics world, and free any extra data it may require
 	pub fn RB_dworld_delete(world: *const rbDynamicsWorld);
@@ -42,8 +42,8 @@ extern {
 	// Settings -------------------------
 
 	// Gravity
-	pub fn RB_dworld_get_gravity(world: *const rbDynamicsWorld, g_out: *const c_float);
-	pub fn RB_dworld_set_gravity(world: *const rbDynamicsWorld, g_in: *const c_float);
+	pub fn RB_dworld_get_gravity(world: *const rbDynamicsWorld, g_out: &mut [c_float; 3]);
+	pub fn RB_dworld_set_gravity(world: *const rbDynamicsWorld, g_in: &[c_float; 3]);
 
 	// Constraint Solver
 	pub fn RB_dworld_set_solver_iterations(world: *const rbDynamicsWorld, num_solver_iterations: c_int);
@@ -75,14 +75,14 @@ extern {
 
 	pub fn RB_world_convex_sweep_test(
         world: *const rbDynamicsWorld, object: *const rbRigidBody,
-        loc_start: *const c_float, loc_end: *const c_float,
-        v_location: *const c_float, v_hitpoint: *const c_float, v_normal: *const c_float, 
+        loc_start: &[c_float; 3], loc_end: &[c_float; 3],
+        v_location: &[c_float; 3], v_hitpoint: &[c_float; 3], v_normal: &[c_float; 3], 
         r_hit: *const c_int);
 
 	// ............
 
 	// Create new RigidBody instance
-	pub fn RB_body_new(shape: *const rbCollisionShape, loc: *const c_float, rot: *const c_float) -> *const rbRigidBody;
+	pub fn RB_body_new(shape: *const rbCollisionShape, loc: &[c_float; 3], rot: &[c_float; 4]) -> *const rbRigidBody;
 
 	// Delete the given RigidBody instance
 	pub fn RB_body_delete(body: *const rbRigidBody);
@@ -130,12 +130,12 @@ extern {
 	pub fn RB_body_set_sleep_thresh(body: rbRigidBody, liner: c_float, angular: c_float);
 
 	// Linear Velocity
-	pub fn RB_body_get_linear_velocity(body: *const rbRigidBody, v_out: *const c_float);
-	pub fn RB_body_set_linear_velocity(body: *const rbRigidBody, v_in: *const c_float);
+	pub fn RB_body_get_linear_velocity(body: *const rbRigidBody, v_out: &mut [c_float; 3]);
+	pub fn RB_body_set_linear_velocity(body: *const rbRigidBody, v_in: &[c_float; 3]);
 
 	// Angular Velocity
-	pub fn RB_body_get_angular_velocity(body: *const rbRigidBody, v_out: c_float);
-	pub fn RB_body_set_angular_velocity(body: *const rbRigidBody, v_in: *const c_float);
+	pub fn RB_body_get_angular_velocity(body: *const rbRigidBody, v_out: &mut [c_float; 3]);
+	pub fn RB_body_set_angular_velocity(body: *const rbRigidBody, v_in: &[c_float; 3]);
 
 	// Linear/Angular Factor, used to lock translation/roation axes
 	pub fn RB_body_set_linear_factor(object: *const rbRigidBody, x: c_float, y: c_float, z: c_float);
@@ -153,24 +153,24 @@ extern {
 
 	// Simulation -----------------------
 
-	// Get current transform matrix of RigidBody to use in Blender (OpenGL format)
-	pub fn RB_body_get_transform_matrix(body: *const rbRigidBody, m_out: *const c_float);
+	// Get current transform matrix of RigidBody (OpenGL format)
+	pub fn RB_body_get_transform_matrix(body: *const rbRigidBody, m_out: &mut [[c_float; 4]; 4]);
 
 	// Set RigidBody's location and rotation
-	pub fn  RB_body_set_loc_rot(body: *const rbRigidBody, loc: *const c_float, rot: *const c_float);
+	pub fn  RB_body_set_loc_rot(body: *const rbRigidBody, loc: &[c_float; 3], rot: &[c_float; 4]);
 	// Set RigidBody's local scaling
-	pub fn RB_body_set_scale(body: *const rbRigidBody, scale: *const c_float);
+	pub fn RB_body_set_scale(body: *const rbRigidBody, scale: &[c_float; 3]);
 
 	// ............
 
 	// Get RigidBody's position as vector
-	pub fn RB_body_get_position(body: *const rbRigidBody, v_out: *const c_float);
+	pub fn RB_body_get_position(body: *const rbRigidBody, v_out: &mut [c_float; 3]);
 	// Get RigidBody's orientation as quaternion
-	pub fn RB_body_get_orientation(body: *const rbRigidBody, v_out: *const c_float);
+	pub fn RB_body_get_orientation(body: *const rbRigidBody, v_out: &mut [c_float; 4]);
 
 	// ............
 
-	pub fn RB_body_apply_central_force(body: *const rbRigidBody, v_in: *const c_float);
+	pub fn RB_body_apply_central_force(body: *const rbRigidBody, v_in: &[c_float; 3]);
 
 	// **********************************
 	// Collision Shape Methods
@@ -225,14 +225,14 @@ extern {
 	// Remove Rigid Body Constraint from simulation world
 	pub fn RB_dworld_remove_constraint(world: *const rbDynamicsWorld, con: *const rbConstraint);
 
-	pub fn RB_constraint_new_point(pivot: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_fixed(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_hinge(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_slider(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_piston(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_6dof(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_6dof_spring(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
-	pub fn RB_constraint_new_motor(pivot: *const c_float, orn: *const c_float, rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_point(pivot: &[c_float; 3], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_fixed(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_hinge(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_slider(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_piston(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_6dof(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_6dof_spring(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
+	pub fn RB_constraint_new_motor(pivot: &[c_float; 3], orn: &[c_float; 4], rb1: *const rbRigidBody, rb2: *const rbRigidBody) -> *const rbConstraint;
 
 	// ............
 
@@ -275,3 +275,30 @@ extern {
 	pub fn RB_constraint_set_breaking_threshold(con: *const rbConstraint, threshold: c_float);
 
 }
+
+#[cfg(test)]
+mod test {
+	use super::*;
+    // Log to memory
+    // let mut writer = MemWriter::new();
+    // log::add_log_stream(log::LogStreamCustom(&mut writer));
+    // let mut reader = BufReader::new(writer.get_ref());
+    //
+    #[test]
+    fn test_dworld() {
+    	unsafe {
+    		let mut gravity = [0.0, -9.0, 0.0];
+        	let world = RB_dworld_new(&gravity);
+        	println!("world created!");
+        	let floor_shape = RB_shape_new_box(50.0, 50.0, 50.0);
+        	let body = RB_body_new(floor_shape, &[0.5, 0.5, 1.0], &[1.0, 0.0, 0.0, 0.0]);
+        	RB_dworld_add_body(world, body, 0);
+        	println!("body created");
+        	RB_dworld_get_gravity(world, &mut gravity);
+        	println!("gravity {:?}", gravity);
+        	RB_dworld_delete(world);
+        	println!("world destroyed!");
+        }
+    }
+}
+

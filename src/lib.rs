@@ -1,6 +1,6 @@
 //! A binding for the BulletPhyscis Library
 
-#![feature(libc)]
+// #![feature(libc)]
 
 extern crate libc;
 

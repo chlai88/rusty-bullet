@@ -28,17 +28,19 @@ project(Rb_Bullet
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../../lib)
 
+# set(CMAKE_OSX_ARCHITECTURES x86_64;i386)
+
 set(BULLET_BASE_DIR /Users/chlai/projects/bullet/bullet3)
 
 set(BULLET_INCLUDE_DIRS 
 	${BULLET_BASE_DIR}/src
 )
 
-set(BULLET_LIBRARIES 
-	${BULLET_BASE_DIR}/lib/libBulletCollision_xcode4.a
-	${BULLET_BASE_DIR}/lib/libBulletDynamics_xcode4.a
-	${BULLET_BASE_DIR}/lib/libLinearMath_xcode4.a	
-)
+# set(BULLET_LIBRARIES 
+#	${BULLET_BASE_DIR}/lib/libBulletCollision_xcode4.a
+#	${BULLET_BASE_DIR}/lib/libBulletDynamics_xcode4.a
+#	${BULLET_BASE_DIR}/lib/libLinearMath_xcode4.a	
+# )
 
 include_directories(
 	${BULLET_INCLUDE_DIRS}
@@ -51,4 +53,4 @@ set(SRC
 
 add_library(rb_bullet STATIC ${SRC})
 
-target_link_libraries(rb_bullet ${BULLET_LIBRARIES})
+# target_link_libraries(rb_bullet ${BULLET_LIBRARIES})

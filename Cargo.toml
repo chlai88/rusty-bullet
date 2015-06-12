@@ -2,7 +2,7 @@
 name = "rusty-bullet"
 version = "0.0.1"
 authors = ["Chern Lai <chlai@simiwako.com>"]
-links = "rb_bullet"
+# links = "rb_bullet"
 build = "build.rs"
 
 description = "A rust wrapper for bullet physics library"
@@ -15,6 +15,10 @@ license = "MIT"
 [lib]
 name = "rusty_bullet"
 path = "./src/lib.rs"
+crate-type = ["rlib"]
 
-# [target.x86_64-apple-darwin.rb_bullet]
+[dependencies]
+libc = "0.1.*"
+
+[target.x86_64-apple-darwin.rb_bullet]
 # rustc-link-search = ["./target/release/native"]
