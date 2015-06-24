@@ -30,7 +30,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../../lib)
 
 # set(CMAKE_OSX_ARCHITECTURES x86_64;i386)
 
-set(BULLET_BASE_DIR /Users/chlai/projects/bullet/bullet3)
+set(BULLET_BASE_DIR /Users/chernobyl/projects/bullet3)
 
 set(BULLET_INCLUDE_DIRS 
 	${BULLET_BASE_DIR}/src
