@@ -5,7 +5,7 @@ authors = ["Chern Lai <chlai@simiwako.com>"]
 # links = "rb_bullet"
 build = "build.rs"
 
-description = "A rust wrapper for bullet physics library"
+description = "Another rust wrapper for bullet physics library"
 documentation = ""
 keywords = ["3d", "physics", "rigid body", "binding"]
 repository = "https://github.com/chlai88/rusty-bullet"
